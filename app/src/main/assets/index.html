@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home</title>
+<style>
+:root{color-scheme:dark;--f:-apple-system,"SF Pro Display","Inter","Roboto","Helvetica Neue",Arial,sans-serif;--g:rgba(255,255,255,.08);--gb:rgba(255,255,255,.16)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#07080c;font-family:var(--f);color:#fff;overflow:hidden}
+.tv{position:absolute;inset:0;font-size:min(1.25vw,2.2vh);background:radial-gradient(ellipse at 15% 0,#1b2236 0,transparent 55%),radial-gradient(ellipse at 90% 100%,#241a36 0,transparent 55%),#07080c}
+.scroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;scroll-behavior:smooth}
+.scroll::-webkit-scrollbar{display:none}
+.content{position:relative;padding:2.5em 5em 4em}
+.hd{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin-bottom:1.8em}
+.ttl{font-size:2.4em;font-weight:600;letter-spacing:-.02em}
+.clk{text-align:center}
+.time{font-size:4.2em;font-weight:600;line-height:1;letter-spacing:-.04em;background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.55));-webkit-background-clip:text;background-clip:text;color:transparent}
+.date{font-size:1em;opacity:.65;margin-top:.3em;font-weight:500}
+.ic{justify-self:end;display:flex;gap:.8em}
+.cb{width:2.8em;height:2.8em;border-radius:50%;display:grid;place-items:center;background:var(--g);border:1px solid var(--gb)}
+.cb svg{width:1.3em;height:1.3em;transition:opacity .3s}
+.cb.off svg{opacity:.3}
+.dock{display:grid;grid-template-columns:repeat(7,1fr);gap:1.2em;padding:1.2em;border-radius:2.2em;background:var(--g);border:1px solid var(--gb);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 3em rgba(120,140,255,.08)}
+.app{aspect-ratio:16/9;border-radius:1.1em;display:grid;place-items:center;font-weight:600;font-size:1.1em;text-align:center;padding:.4em;background:#1a1d26 center/cover no-repeat;box-shadow:0 .5em 1.2em rgba(0,0,0,.4);overflow:hidden}
+.app.ico{background-size:auto 55%}
+.row2{display:grid;grid-template-columns:1.25fr 1fr;gap:3em;margin-top:2.4em}
+.lbl{font-size:.9em;opacity:.55;margin-bottom:.7em;font-weight:500}
+.chips{display:grid;gap:.9em}
+.in{grid-template-columns:repeat(5,1fr)}.sh{grid-template-columns:repeat(3,1fr)}
+.chip{height:4.6em;border-radius:1em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4em;font-size:.95em;font-weight:500;background:var(--g);border:1px solid var(--gb);text-align:center}
+.chip i{font-style:normal;font-size:1.5em;line-height:1}
+.row3{display:grid;grid-template-columns:1.25fr 1fr;gap:1.4em;margin-top:2em}
+.pn{border-radius:1.6em;padding:1.5em;background:var(--g);border:1px solid var(--gb)}
+.pn h4{font-size:.95em;opacity:.55;font-weight:500;margin-bottom:.8em}
+.wx{display:grid;grid-template-columns:1fr 2fr;gap:1.5em}
+.big{font-size:4.6em;font-weight:500;letter-spacing:-.04em;line-height:1}
+.sub{font-size:.85em;opacity:.55;margin-top:.15em}
+.hr{display:grid;grid-template-columns:repeat(6,1fr);text-align:center;font-size:.95em;gap:.3em}
+.hr b{display:block;opacity:.6;font-weight:500;margin-bottom:.5em}
+.hr span{display:block;font-size:1.5em;margin-bottom:.3em}
+.cr{display:flex;justify-content:space-between;align-items:center;padding:.65em 0;font-size:1.05em}
+.up,.dn{padding:.2em .6em;border-radius:.6em;font-size:.85em;margin-left:.8em}
+.up{background:rgba(60,200,110,.2);color:#6ee79a}.dn{background:rgba(240,80,80,.2);color:#ff8a8a}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1em}
+.gt{display:flex;align-items:center;gap:1em;padding:.9em;border-radius:1.2em;background:var(--g);border:1px solid var(--gb);font-weight:500;font-size:1.05em;min-width:0}
+.gt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gi{width:3.4em;height:3.4em;border-radius:.8em;flex:none;display:grid;place-items:center;background:#1a1d26 center/contain no-repeat;font-weight:600}
+.bubble{position:absolute;z-index:5;pointer-events:none;border:2px solid rgba(255,255,255,.75);background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,0) 60%);box-shadow:0 0 2.4em rgba(170,190,255,.5),inset 0 .15em .5em rgba(255,255,255,.5);transition:left .55s cubic-bezier(.34,1.4,.5,1),top .55s cubic-bezier(.34,1.4,.5,1),width .55s cubic-bezier(.34,1.4,.5,1),height .55s cubic-bezier(.34,1.4,.5,1),border-radius .4s ease}
+</style>
+</head>
+<body>
+<div class="tv"><div class="scroll" id="sc"><div class="content" id="ct">
+  <div class="hd">
+    <div class="ttl">Home</div>
+    <div class="clk"><div class="time" id="time"></div><div class="date" id="date"></div></div>
+    <div class="ic">
+      <div class="cb" id="wf" data-f data-act="wifi"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1" fill="#fff"/></svg></div>
+      <div class="cb" data-f data-act="settings"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
+    </div>
+  </div>
+  <div class="dock" id="dock"></div>
+  <div class="row2">
+    <div><div class="lbl">Inputs</div><div class="chips in" id="ins"></div></div>
+    <div><div class="lbl">Shortcuts</div><div class="chips sh">
+      <div class="chip" data-f data-act="all"><i>&#8942;&#8942;</i>All Apps</div>
+      <div class="chip" data-f data-act="wifi"><i>&#128246;</i>Wi-Fi</div>
+      <div class="chip" data-f data-act="settings"><i>&#9881;</i>Settings</div></div></div>
+  </div>
+  <div class="row3">
+    <div class="pn" data-f><h4>Weather</h4><div class="wx"><div><div class="big" id="wt">--&deg;</div><div style="margin-top:.6em;font-size:1.1em" id="wc">Loading</div><div class="sub" id="wh">Chennai</div></div><div class="hr" id="hr"></div></div></div>
+    <div class="pn" data-f><h4>Crypto &middot; 24h change</h4><div id="cr"><div class="sub">Loading</div></div></div>
+  </div>
+  <div class="lbl" style="margin:2.4em 0 .8em">All apps</div>
+  <div class="grid" id="grid"></div>
+  <div class="bubble" id="bb"></div>
+</div></div></div>
+<script>
+(function(){
+var A=window.Android;
+function $(i){return document.getElementById(i)}
+var cur=null,fs=[],lastApps="",cache={};
+var PREF=/netflix|youtube|prime video|hotstar|spotify|disney|zee5|sony ?liv|jio/i;
+var MOCK=[{pkg:"a",label:"Netflix"},{pkg:"b",label:"YouTube"},{pkg:"c",label:"Prime Video"},{pkg:"d",label:"Spotify"},{pkg:"e",label:"Chrome"},{pkg:"f",label:"Files"},{pkg:"g",label:"Games"},{pkg:"h",label:"Photos"}];
+
+/* ---------- focus + liquid bubble ---------- */
+function focus(el){
+  cur=el;var bb=$("bb"),ct=$("ct"),sc=$("sc");
+  var r=el.getBoundingClientRect(),c=ct.getBoundingClientRect(),p=8;
+  var br=parseFloat(getComputedStyle(el).borderTopLeftRadius)||12;
+  bb.style.left=(r.left-c.left-p)+"px";bb.style.top=(r.top-c.top-p)+"px";
+  bb.style.width=(r.width+2*p)+"px";bb.style.height=(r.height+2*p)+"px";
+  bb.style.borderRadius=Math.min(br+p,(r.height+2*p)/2)+"px";
+  var sr=sc.getBoundingClientRect();
+  if(r.bottom>sr.bottom-40)sc.scrollTop+=r.bottom-sr.bottom+80;
+  else if(r.top<sr.top+40)sc.scrollTop-=sr.top-r.top+80;
+}
+function focusFirst(){focus(document.querySelector(".dock .app")||fs[0])}
+function move(dx,dy){
+  var c=cur.getBoundingClientRect(),cx=c.left+c.width/2,cy=c.top+c.height/2,best=null,bs=1e9;
+  fs.forEach(function(el){if(el===cur)return;var r=el.getBoundingClientRect(),x=r.left+r.width/2-cx,y=r.top+r.height/2-cy;
+    var along=dx?x*dx:y*dy,cross=dx?Math.abs(y):Math.abs(x);if(along<=4)return;
+    var s=along+cross*2.2;if(s<bs){bs=s;best=el}});
+  if(best)focus(best);
+}
+function collect(){
+  fs=[].slice.call(document.querySelectorAll("[data-f]"));
+  fs.forEach(function(el){if(!el._h){el._h=1;
+    el.addEventListener("mouseenter",function(){focus(el)});
+    el.addEventListener("click",function(){act(el)})}});
+}
+function act(el){
+  var d=el.dataset;if(!A)return;
+  if(d.pkg)A.launch(d.pkg);
+  else if(d.inp)A.startInput(d.inp);
+  else if(d.act==="wifi")A.openSettings("wifi");
+  else if(d.act==="settings")A.openSettings("all");
+  else if(d.act==="all"){var g=$("grid").firstChild;if(g)focus(g)}
+}
+document.addEventListener("keydown",function(e){
+  var k={ArrowRight:[1,0],ArrowLeft:[-1,0],ArrowDown:[0,1],ArrowUp:[0,-1]}[e.key];
+  if(k){e.preventDefault();if(!cur)focusFirst();else move(k[0],k[1]);return}
+  if(e.key==="Enter"||e.keyCode===23){e.preventDefault();if(cur)act(cur)}
+});
+window.addEventListener("resize",function(){if(cur)focus(cur)});
+
+/* ---------- apps (real icons from Android) ---------- */
+function paint(el,a,banner,i){
+  setTimeout(function(){
+    var key=a.pkg+(banner?"B":"I"),r=cache[key];
+    if(r===undefined){try{r=A?A.getIcon(a.pkg,banner):""}catch(e){r=""}cache[key]=r}
+    if(r){el.classList.add(r.charAt(0)==="b"?"ban":"ico");el.style.backgroundImage="url("+r.slice(2)+")"}
+    else el.textContent=banner?a.label:a.label.charAt(0);
+  },i*20);
+}
+function tile(a,isDock,i){
+  var d=document.createElement("div");d.setAttribute("data-f","");d.dataset.pkg=a.pkg;
+  if(isDock){d.className="app";paint(d,a,true,i)}
+  else{d.className="gt";d.innerHTML='<div class="gi"></div><span></span>';d.lastChild.textContent=a.label;paint(d.firstChild,a,false,i)}
+  return d;
+}
+function refreshApps(){
+  var s;try{s=A?A.getApps():JSON.stringify(MOCK)}catch(e){s="[]"}
+  if(s===lastApps)return;lastApps=s;
+  var list=JSON.parse(s),pref=[],rest=[];
+  list.forEach(function(a){(PREF.test(a.label)?pref:rest).push(a)});
+  var dock=$("dock"),grid=$("grid");dock.innerHTML="";grid.innerHTML="";
+  pref.concat(rest).slice(0,7).forEach(function(a,i){dock.appendChild(tile(a,true,i))});
+  list.forEach(function(a,i){grid.appendChild(tile(a,false,i+7))});
+  collect();
+  if(!cur||!document.body.contains(cur))focusFirst();
+}
+function refreshInputs(){
+  var l=[];try{l=A?JSON.parse(A.getInputs()):[{id:"1",label:"HDMI 1"},{id:"2",label:"HDMI 2"}]}catch(e){}
+  var box=$("ins");box.innerHTML="";
+  if(!l.length){box.style.display="block";box.innerHTML='<div class="sub">No inputs found</div>'}
+  l.slice(0,5).forEach(function(x){
+    var c=document.createElement("div");c.className="chip";c.setAttribute("data-f","");c.dataset.inp=x.id;
+    c.innerHTML="<i>&#9644;</i>";var s=document.createElement("span");s.textContent=x.label;c.appendChild(s);box.appendChild(c);
+  });
+  collect();
+}
+
+/* ---------- clock + wifi ---------- */
+function tick(){
+  var d=new Date(),h=d.getHours()%12||12,m=("0"+d.getMinutes()).slice(-2);
+  $("time").textContent=h+":"+m;
+  $("date").textContent=d.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long"});
+  var n="wifi";try{if(A)n=A.getNet()}catch(e){}
+  $("wf").classList.toggle("off",n==="none");
+}
+
+/* ---------- weather (Open-Meteo, Chennai) ---------- */
+function wxIcon(c){return c===0?"\u2600\uFE0F":c<3?"\u26C5":c<4?"\u2601\uFE0F":c<50?"\uD83C\uDF2B\uFE0F":c<70?"\uD83C\uDF27\uFE0F":c<80?"\u2744\uFE0F":c<95?"\uD83C\uDF26\uFE0F":"\u26C8\uFE0F"}
+function wxTxt(c){return c===0?"Clear":c<3?"Partly Cloudy":c<4?"Overcast":c<50?"Fog":c<70?"Rain":c<80?"Snow":c<95?"Showers":"Thunderstorm"}
+function weather(){
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=13.08&longitude=80.27&current=temperature_2m,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=2")
+  .then(function(r){return r.json()}).then(function(j){
+    $("wt").textContent=Math.round(j.current.temperature_2m)+"\u00B0";
+    $("wc").textContent=wxTxt(j.current.weather_code);
+    $("wh").textContent="H:"+Math.round(j.daily.temperature_2m_max[0])+"\u00B0 L:"+Math.round(j.daily.temperature_2m_min[0])+"\u00B0 \u00B7 Chennai";
+    var t=j.hourly.time,now=j.current.time.slice(0,13)+":00",i0=0,h="";
+    for(var i=0;i<t.length;i++){if(t[i]>=now){i0=i;break}}
+    for(var k=1;k<=6;k++){var i=i0+k;if(i>=t.length)break;
+      var hr=parseInt(t[i].slice(11,13),10),lab=(hr%12||12)+(hr<12?" AM":" PM");
+      h+="<div><b>"+lab+"</b><span>"+wxIcon(j.hourly.weather_code[i])+"</span>"+Math.round(j.hourly.temperature_2m[i])+"\u00B0</div>"}
+    $("hr").innerHTML=h;
+  }).catch(function(){$("wc").textContent="Offline"});
+}
+
+/* ---------- crypto (Binance public API) ---------- */
+function crypto(){
+  var q=encodeURIComponent('["BTCUSDT","ETHUSDT","SOLUSDT"]'),nm={BTCUSDT:"Bitcoin",ETHUSDT:"Ethereum",SOLUSDT:"Solana"};
+  fetch("https://api.binance.com/api/v3/ticker/24hr?type=MINI&symbols="+q)
+  .then(function(r){return r.json()}).then(function(a){
+    var h="";a.forEach(function(x){var l=parseFloat(x.lastPrice),o=parseFloat(x.openPrice),p=(l-o)/o*100;
+      h+='<div class="cr"><span>'+(nm[x.symbol]||x.symbol)+'</span><span>$'+l.toLocaleString("en-US",{maximumFractionDigits:l<1000?2:0})+'<span class="'+(p>=0?"up":"dn")+'">'+(p>=0?"+":"")+p.toFixed(1)+'%</span></span></div>'});
+    $("cr").innerHTML=h;
+  }).catch(function(){$("cr").innerHTML='<div class="sub">Unavailable</div>'});
+}
+
+window.refreshAll=function(){refreshApps();refreshInputs();tick()};
+window.goHome=function(){$("sc").scrollTop=0;refreshAll();focusFirst()};
+refreshAll();weather();crypto();
+setInterval(tick,10000);setInterval(weather,900000);setInterval(crypto,120000);
+setTimeout(function(){if(!cur)focusFirst()},150);
+})();
+</script>
+</body>
+</html>
